@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Custom Splash Screen Drawable
+    ---------------------------------
+    Features:
+    - Gradient background for modern UI
+    - Centered app logo (optional)
+    - Scalable and clean layout
+    - Easy customization
+-->
+
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- =========================
+         BACKGROUND (GRADIENT)
+         ========================= -->
+    <item>
+        <shape android:shape="rectangle">
+            <gradient
+                android:startColor="#4A90E2"   <!-- Top color -->
+                android:endColor="#9013FE"     <!-- Bottom color -->
+                android:angle="270"/>          <!-- Vertical gradient -->
+        </shape>
+    </item>
+
+    <!-- =========================
+         OPTIONAL OVERLAY (SOFT PATTERN / TINT)
+         ========================= -->
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="#22000000"/> <!-- Light dark overlay -->
+        </shape>
+    </item>
+
+    <!-- =========================
+         APP LOGO (CENTERED)
+         ========================= -->
+    <item>
+        <bitmap
+            android:gravity="center"
+            android:src="@mipmap/ic_launcher" /> <!-- Replace with your logo -->
+    </item>
+
+    <!-- =========================
+         OPTIONAL BOTTOM TEXT / BRAND STRIP
+         ========================= -->
+    <!-- Uncomment if using custom drawable text or branding -->
+    <!--
+    <item android:bottom="40dp">
+        <bitmap
+            android:gravity="bottom|center_horizontal"
+            android:src="@drawable/brand_text" />
+    </item>
+    -->
+
+</layer-list>
