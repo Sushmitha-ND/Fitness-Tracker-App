@@ -1,60 +1,36 @@
-// Importing async package for Timer functionality
 import 'dart:async';
-
-// Importing Flutter material design UI package
 import 'package:flutter/material.dart';
 
-// Entry point of the application
 void main() {
-  // runApp starts the Flutter app
   runApp(const FitLifeApp());
 }
 
-// ------------------ USER DATA MODEL ------------------
-// Singleton class to store user data globally (data persistence during app session)
+// Simple Data Model to persist info during the session
 class UserProfile {
-  // Creating a single instance (Singleton pattern)
   static final UserProfile _instance = UserProfile._internal();
-
-  // Factory constructor returns same instance always
   factory UserProfile() => _instance;
-
-  // Private constructor
   UserProfile._internal();
 
-  // User details variables
   String username = "";
   String email = "";
   String age = "";
   String weight = "";
-
-  // Default weekly progress (75%)
-  double weeklyProgress = 0.75;
+  double weeklyProgress = 0.75; // Mock data: 75%
 }
 
-// ------------------ MAIN APP ------------------
 class FitLifeApp extends StatelessWidget {
   const FitLifeApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      // App title
       title: 'FitLife',
-
-      // Removes debug banner
       debugShowCheckedModeBanner: false,
-
-      // App theme (Material 3 + purple color)
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        primarySwatch: Colors.deepPurple,
         useMaterial3: true,
       ),
-
-      // Initial screen when app starts
       initialRoute: '/',
-
-      // Named routes for navigation
       routes: {
         '/': (context) => const LoginPage(),
         '/welcome': (context) => const WelcomePage(),
@@ -67,7 +43,7 @@ class FitLifeApp extends StatelessWidget {
   }
 }
 
-// ------------------ 1. LOGIN PAGE ------------------
+// --- 1. Login Page ---
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
@@ -76,7 +52,6 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  // Controllers to get input from text fields
   final _userController = TextEditingController();
   final _emailController = TextEditingController();
 
@@ -85,75 +60,25 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(20.0),
-
-        // Column to arrange widgets vertically
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // App Icon
-            const Icon(
-              Icons.fitness_center,
-              size: 80,
-              color: Colors.deepPurple,
-            ),
-
-            // App Title
-            const Text(
-              "FitLife",
-              style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
-            ),
-
+            const Icon(Icons.fitness_center, size: 80, color: Colors.deepPurple),
+            const Text("FitLife", style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold)),
             const SizedBox(height: 30),
-
-            // Username input
-            TextField(
-              controller: _userController,
-              decoration: const InputDecoration(
-                labelText: 'Username',
-                border: OutlineInputBorder(),
-              ),
-            ),
-
+            TextField(controller: _userController, decoration: const InputDecoration(labelText: 'Username', border: OutlineInputBorder())),
             const SizedBox(height: 10),
-
-            // Email input
-            TextField(
-              controller: _emailController,
-              decoration: const InputDecoration(
-                labelText: 'Email',
-                border: OutlineInputBorder(),
-              ),
-            ),
-
+            TextField(controller: _emailController, decoration: const InputDecoration(labelText: 'Email', border: OutlineInputBorder())),
             const SizedBox(height: 10),
-
-            // Password input (hidden text)
-            const TextField(
-              obscureText: true,
-              decoration: InputDecoration(
-                labelText: 'Password',
-                border: OutlineInputBorder(),
-              ),
-            ),
-
+            const TextField(obscureText: true, decoration: InputDecoration(labelText: 'Password', border: OutlineInputBorder())),
             const SizedBox(height: 20),
-
-            // Login Button
             ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                minimumSize: const Size(double.infinity, 50),
-              ),
-
-              // When button is pressed
+              style: ElevatedButton.styleFrom(minimumSize: const Size(double.infinity, 50)),
               onPressed: () {
-                // Save user input in global model
                 UserProfile().username = _userController.text;
                 UserProfile().email = _emailController.text;
-
-                // Navigate to Welcome Page
                 Navigator.pushNamed(context, '/welcome');
               },
-
               child: const Text("Login"),
             ),
           ],
@@ -163,96 +88,42 @@ class _LoginPageState extends State<LoginPage> {
   }
 }
 
-// ------------------ 2. WELCOME PAGE ------------------
+// --- 2. Welcome Page ---
 class WelcomePage extends StatelessWidget {
   const WelcomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // Allows background to extend under AppBar
-      extendBodyBehindAppBar: true,
-
-      appBar: AppBar(
-        title: const Text("Welcome", style: TextStyle(color: Colors.white)),
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        iconTheme: const IconThemeData(color: Colors.white),
-      ),
-
-      body: Stack(
-        children: [
-          // Background Image
-          Positioned.fill(
-            child: Image.asset(
-              'assets/images/fit.jpg',
-              fit: BoxFit.cover,
-
-              // If image fails → fallback color
-              errorBuilder: (context, error, stackTrace) =>
-                  Container(color: Colors.deepPurple),
+      appBar: AppBar(title: const Text("Welcome to FitLife")),
+      body: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Column(
+          children: [
+            const Text(
+              "Your Journey Starts Here",
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
-          ),
-
-          // Dark overlay for better text visibility
-          Positioned.fill(
-            child: Container(
-              color: Colors.black.withValues(alpha: 0.5),
+            const SizedBox(height: 20),
+            const Text(
+              "To provide the best workout plans, we need to understand your physical requirements and fitness goals. FitLife tracks your calories, yoga sessions, and daily improvements.",
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 16),
             ),
-          ),
-
-          // Main content
-          SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.all(24.0),
-              child: Column(
-                children: [
-                  const Text(
-                    "Your Journey Starts Here",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 30,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
-                  ),
-
-                  const SizedBox(height: 20),
-
-                  const Text(
-                    "FitLife helps you track workouts...",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 18, color: Colors.white),
-                  ),
-
-                  const Spacer(),
-
-                  // Button to go to details page
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      minimumSize: const Size(200, 50),
-                      backgroundColor: Colors.deepPurple,
-                      foregroundColor: Colors.white,
-                    ),
-
-                    onPressed: () =>
-                        Navigator.pushNamed(context, '/details'),
-
-                    child: const Text("Get Started"),
-                  ),
-
-                  const SizedBox(height: 40),
-                ],
-              ),
+            const Spacer(),
+            ElevatedButton(
+              onPressed: () => Navigator.pushNamed(context, '/details'),
+              child: const Text("Get Started"),
             ),
-          ),
-        ],
+            const SizedBox(height: 20),
+          ],
+        ),
       ),
     );
   }
 }
 
-// ------------------ 3. USER DETAILS PAGE ------------------
+// --- 3. User Details Page ---
 class UserDetailsPage extends StatefulWidget {
   const UserDetailsPage({super.key});
 
@@ -261,7 +132,6 @@ class UserDetailsPage extends StatefulWidget {
 }
 
 class _UserDetailsPageState extends State<UserDetailsPage> {
-  // Controllers for user inputs
   final _ageController = TextEditingController();
   final _weightController = TextEditingController();
 
@@ -269,39 +139,21 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text("Personal Details")),
-
       body: Padding(
         padding: const EdgeInsets.all(20.0),
-
         child: Column(
           children: [
-            // Age input
-            TextField(
-              controller: _ageController,
-              decoration: const InputDecoration(labelText: "Age"),
-            ),
-
-            // Weight input
-            TextField(
-              controller: _weightController,
-              decoration: const InputDecoration(labelText: "Weight (kg)"),
-            ),
-
+            TextField(controller: _ageController, decoration: const InputDecoration(labelText: "Age")),
+            TextField(controller: _weightController, decoration: const InputDecoration(labelText: "Weight (kg)")),
             const SizedBox(height: 30),
-
-            // Save button
             ElevatedButton(
               onPressed: () {
-                // Store user data
                 UserProfile().age = _ageController.text;
                 UserProfile().weight = _weightController.text;
-
-                // Navigate to dashboard
                 Navigator.pushNamed(context, '/dashboard');
               },
-
               child: const Text("Save & Go to Dashboard"),
-            ),
+            )
           ],
         ),
       ),
@@ -309,7 +161,7 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
   }
 }
 
-// ------------------ 4. DASHBOARD ------------------
+// --- 4. Dashboard (with Timer) ---
 class DashboardPage extends StatefulWidget {
   const DashboardPage({super.key});
 
@@ -318,78 +170,40 @@ class DashboardPage extends StatefulWidget {
 }
 
 class _DashboardPageState extends State<DashboardPage> {
-  int _seconds = 0; // Timer value
-  Timer? _timer;   // Timer object
-  bool _isRunning = false; // Track timer state
+  int _seconds = 0;
+  Timer? _timer;
+  bool _isRunning = false;
 
-  // Function to start/pause timer
   void _toggleTimer() {
     if (_isRunning) {
-      // Stop timer
       _timer?.cancel();
     } else {
-      // Start timer (runs every second)
       _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
         setState(() => _seconds++);
       });
     }
-
-    // Update UI
     setState(() => _isRunning = !_isRunning);
-  }
-
-  // Clean up memory when widget is destroyed
-  @override
-  void dispose() {
-    _timer?.cancel();
-    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text("FitLife Dashboard")),
-
-      // Drawer (side menu)
       drawer: Drawer(
         child: ListView(
           children: [
-            const DrawerHeader(
-              decoration: BoxDecoration(color: Colors.deepPurple),
-              child: Text("Menu"),
-            ),
-
-            // Navigate to profile
-            ListTile(
-              leading: const Icon(Icons.person),
-              title: const Text("Profile"),
-              onTap: () => Navigator.pushNamed(context, '/profile'),
-            ),
-
-            // Navigate to progress
-            ListTile(
-              leading: const Icon(Icons.bar_chart),
-              title: const Text("Progress"),
-              onTap: () => Navigator.pushNamed(context, '/progress'),
-            ),
+            const DrawerHeader(decoration: BoxDecoration(color: Colors.deepPurple), child: Text("Menu", style: TextStyle(color: Colors.white))),
+            ListTile(leading: const Icon(Icons.person), title: const Text("Profile"), onTap: () => Navigator.pushNamed(context, '/profile')),
+            ListTile(leading: const Icon(Icons.bar_chart), title: const Text("Progress"), onTap: () => Navigator.pushNamed(context, '/progress')),
           ],
         ),
       ),
-
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
-
         child: Column(
           children: [
-            // Greeting message
-            Text(
-              "Hello, ${UserProfile().username}!",
-              style: const TextStyle(fontSize: 22),
-            ),
-
+            Text("Hello, ${UserProfile().username}!", style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
             const SizedBox(height: 20),
-
-            // Activity cards
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
@@ -397,38 +211,89 @@ class _DashboardPageState extends State<DashboardPage> {
                 _activityCard("Exercise", Icons.fitness_center, Colors.orange),
               ],
             ),
-
             const SizedBox(height: 30),
-
-            // Timer section
-            const Text("Workout Timer"),
-
+            const Text("Workout Timer", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
             Container(
+              margin: const EdgeInsets.symmetric(vertical: 20),
               padding: const EdgeInsets.all(30),
-              child: Text("$_seconds s"),
+              decoration: BoxDecoration(color: Colors.grey[200], shape: BoxShape.circle),
+              child: Text("$_seconds s", style: const TextStyle(fontSize: 40, fontWeight: FontWeight.bold)),
             ),
-
-            // Start/Pause button
             ElevatedButton.icon(
               onPressed: _toggleTimer,
               icon: Icon(_isRunning ? Icons.pause : Icons.play_arrow),
-              label: Text(_isRunning ? "Pause" : "Start"),
+              label: Text(_isRunning ? "Pause Workout" : "Start Workout"),
             ),
+            const SizedBox(height: 20),
+            ElevatedButton(onPressed: () => Navigator.pushNamed(context, '/progress'), child: const Text("View Progress Report")),
           ],
         ),
       ),
     );
   }
 
-  // Reusable card widget
   Widget _activityCard(String title, IconData icon, Color color) {
     return Card(
-      child: Column(
+      child: Container(
+        width: 150, padding: const EdgeInsets.all(20),
+        child: Column(children: [Icon(icon, color: color, size: 40), Text(title)]),
+      ),
+    );
+  }
+}
+
+// --- 5. Progress Page ---
+class ProgressPage extends StatelessWidget {
+  const ProgressPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text("Weekly Progress")),
+      body: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text("Performance Overview", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+            const SizedBox(height: 20),
+            const Text("Daily Goal: 80%"),
+            LinearProgressIndicator(value: 0.8, minHeight: 10, color: Colors.green, backgroundColor: Colors.grey[300]),
+            const SizedBox(height: 20),
+            const Text("Weekly Goal: 75%"),
+            LinearProgressIndicator(value: UserProfile().weeklyProgress, minHeight: 10, color: Colors.deepPurple, backgroundColor: Colors.grey[300]),
+            const SizedBox(height: 40),
+            const Center(child: Text("Keep it up! You are doing great this week.")),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// --- 6. Profile Page ---
+class ProfilePage extends StatelessWidget {
+  const ProfilePage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final user = UserProfile();
+    return Scaffold(
+      appBar: AppBar(title: const Text("User Profile")),
+      body: ListView(
+        padding: const EdgeInsets.all(20),
         children: [
-          Icon(icon, color: color),
-          Text(title),
+          const Center(child: CircleAvatar(radius: 50, child: Icon(Icons.person, size: 50))),
+          const SizedBox(height: 20),
+          ListTile(leading: const Icon(Icons.label), title: const Text("Username"), subtitle: Text(user.username)),
+          ListTile(leading: const Icon(Icons.email), title: const Text("Email"), subtitle: Text(user.email)),
+          ListTile(leading: const Icon(Icons.calendar_today), title: const Text("Age"), subtitle: Text("${user.age} years")),
+          ListTile(leading: const Icon(Icons.monitor_weight), title: const Text("Weight"), subtitle: Text("${user.weight} kg")),
+          const SizedBox(height: 20),
+          ElevatedButton(onPressed: () => Navigator.pop(context), child: const Text("Back to Dashboard")),
         ],
       ),
     );
   }
 }
+
